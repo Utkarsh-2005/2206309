@@ -1,8 +1,12 @@
 require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
+const cors =  require("cors");
+
+
 
 const server = express();
+server.use(cors());
 const port = 4000;
 const API_BASE = 'http://20.244.56.144/evaluation-service';
 
