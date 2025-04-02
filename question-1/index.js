@@ -7,7 +7,7 @@ server.use(express.json())
 
 
 const headers = {
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZXhwIjoxNzQzNjA0MjU2LCJpYXQiOjE3NDM2MDM5NTYsImlzcyI6IkFmZm9yZG1lZCIsImp0aSI6IjUzNmYxYmY0LTk1NzktNDUyZi04YzMzLTBjYmY1MDI1N2Y1MiIsInN1YiI6IjIyMDYzMDlAa2lpdC5hYy5pbiJ9LCJlbWFpbCI6IjIyMDYzMDlAa2lpdC5hYy5pbiIsIm5hbWUiOiJ1dGthcnNoIGpoYSIsInJvbGxObyI6IjIyMDYzMDkiLCJhY2Nlc3NDb2RlIjoibndwd3JaIiwiY2xpZW50SUQiOiI1MzZmMWJmNC05NTc5LTQ1MmYtOGMzMy0wY2JmNTAyNTdmNTIiLCJjbGllbnRTZWNyZXQiOiJZSFBkU1ZTWWpSc2FHbXZSIn0.o-0uZXahqWAfFIH-Y9zzxaS5obcsAykEb_Ts7bKwnN4`
+    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZXhwIjoxNzQzNjA0NzYxLCJpYXQiOjE3NDM2MDQ0NjEsImlzcyI6IkFmZm9yZG1lZCIsImp0aSI6IjUzNmYxYmY0LTk1NzktNDUyZi04YzMzLTBjYmY1MDI1N2Y1MiIsInN1YiI6IjIyMDYzMDlAa2lpdC5hYy5pbiJ9LCJlbWFpbCI6IjIyMDYzMDlAa2lpdC5hYy5pbiIsIm5hbWUiOiJ1dGthcnNoIGpoYSIsInJvbGxObyI6IjIyMDYzMDkiLCJhY2Nlc3NDb2RlIjoibndwd3JaIiwiY2xpZW50SUQiOiI1MzZmMWJmNC05NTc5LTQ1MmYtOGMzMy0wY2JmNTAyNTdmNTIiLCJjbGllbnRTZWNyZXQiOiJZSFBkU1ZTWWpSc2FHbXZSIn0.b65jC7pkdrBjNRkvYwD1Cyz0thC8ZD_1fipYv5l04Dw`
   };
 
   async function getUsersData() {
@@ -43,6 +43,42 @@ server.get('/test', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' })
   }
 })
+server.get('/users', async (req, res) => {
+  try {
+    const allUsers = await getUsersData();
+    const userDetails = await Promise.all(
+      Object.entries(allUsers).map(async ([uid, uname]) => {
+        const userPosts = await getUserPosts(uid);
+        return { userId: uid, username: uname, postsTotal: userPosts.length };
+      })
+    );
+    userDetails.sort((a, b) => b.postsTotal - a.postsTotal);
+    const bestFiveUsers = userDetails.slice(0, 5);
+    res.json({ topUsers: bestFiveUsers });
+  } catch (err) {
+    console.error('Error retrieving users analytics:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+server.get('/users', async (req, res) => {
+  try {
+    const allUsers = await getUsersData();
+    const userDetails = await Promise.all(
+      Object.entries(allUsers).map(async ([uid, uname]) => {
+        const userPosts = await getUserPosts(uid);
+        return { userId: uid, username: uname, postsTotal: userPosts.length };
+      })
+    );
+    userDetails.sort((a, b) => b.postsTotal - a.postsTotal);
+    const bestFiveUsers = userDetails.slice(0, 5);
+    res.json({ topUsers: bestFiveUsers });
+  } catch (err) {
+    console.error('Error retrieving users analytics:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 server.listen(port, () => {
   console.log(`Server up at http://localhost:${port}`)
