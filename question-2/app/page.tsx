@@ -40,37 +40,37 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 bg-gray-900 text-white min-h-screen">
       <section>
-        <h1 className="text-2xl font-bold mb-4">Top Users</h1>
+        <h1 className="text-3xl font-bold mb-4">Top Users</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {loading
             ? Array(5)
                 .fill(null)
                 .map((_, index) => (
-                  <div key={index} className="h-24 bg-gray-200 animate-pulse rounded-md"></div>
+                  <div key={`user-loading-${index}`} className="h-24 bg-gray-700 animate-pulse rounded-md"></div>
                 ))
-            : topUsers.map((user) => (
-                <div key={user.userId} className="p-4 border rounded-lg shadow-md bg-white">
+            : topUsers.map((user, index) => (
+                <div key={`${user.userId}-${index}`} className="p-4 border border-gray-700 rounded-lg shadow-md bg-gray-800">
                   <h2 className="text-lg font-semibold">{user.username}</h2>
-                  <p className="text-gray-600">{user.postsTotal} posts</p>
+                  <p className="text-gray-400">{user.postsTotal} posts</p>
                 </div>
               ))}
         </div>
       </section>
 
       <section>
-        <h1 className="text-2xl font-bold mb-4">Trending Posts</h1>
+        <h1 className="text-3xl font-bold mb-4">Trending Posts</h1>
         <div className="space-y-4">
           {loading
             ? Array(3)
                 .fill(null)
                 .map((_, index) => (
-                  <div key={index} className="h-32 bg-gray-200 animate-pulse rounded-md"></div>
+                  <div key={`trending-loading-${index}`} className="h-32 bg-gray-700 animate-pulse rounded-md"></div>
                 ))
-            : trendingPosts.map((post) => (
-                <div key={post.id} className="p-4 border rounded-lg shadow-md bg-white">
-                  <p className="text-gray-700">{post.content}</p>
+            : trendingPosts.map((post, index) => (
+                <div key={`${post.id}-${index}`} className="p-4 border border-gray-700 rounded-lg shadow-md bg-gray-800">
+                  <p className="text-gray-300">{post.content}</p>
                   <p className="text-sm text-gray-500 mt-2">{post.commentsCount} comments</p>
                 </div>
               ))}
@@ -78,17 +78,17 @@ export default function Home() {
       </section>
 
       <section>
-        <h1 className="text-2xl font-bold mb-4">Feed</h1>
+        <h1 className="text-3xl font-bold mb-4">Feed</h1>
         <div className="space-y-4">
           {loading
             ? Array(5)
                 .fill(null)
                 .map((_, index) => (
-                  <div key={index} className="h-24 bg-gray-200 animate-pulse rounded-md"></div>
+                  <div key={`feed-loading-${index}`} className="h-24 bg-gray-700 animate-pulse rounded-md"></div>
                 ))
-            : feed.map((post) => (
-                <div key={post.id} className="p-4 border rounded-lg shadow-md bg-white">
-                  <p className="text-gray-700">{post.content}</p>
+            : feed.map((post, index) => (
+                <div key={`${post.id}-${index}`} className="p-4 border border-gray-700 rounded-lg shadow-md bg-gray-800">
+                  <p className="text-gray-300">{post.content}</p>
                   <p className="text-sm text-gray-500 mt-2">by {post.username}</p>
                 </div>
               ))}
